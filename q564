@@ -64,3 +64,36 @@ public:
 };
 
 
+// solution 2
+class Solution {
+public:
+    vector<vector<int>> updateMatrix(vector<vector<int>>& matrix) {
+        int m = matrix.size(), n = matrix[0].size(), ms = m+n+1;
+        queue<pair<int,int>> points;
+        
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                matrix[i][j] == 0 ? points.push(make_pair(i,j)) : (void)(matrix[i][j] = ms);
+            }           
+        }
+        
+       pair<int,int> directions[4] = {{-1,0},{0,-1},{1,0},{0,1}}; 
+       while (!points.empty()) {
+           pair<int,int> cur= points.front();
+           points.pop();
+           
+           int x = cur.first, y = cur.second;
+           for (int d=0; d<4; ++d) {
+               int i = x + directions[d].first; 
+               int j = y + directions[d].second;
+               
+               if (i>=0 && i<m && j>=0 && j<n) {
+                   if (matrix[i][j] == ms) points.push(make_pair(i,j));
+                   matrix[i][j] = min(matrix[i][j], matrix[x][y]+1);
+               }
+           }
+       }
+        
+        return matrix;
+    }
+};
