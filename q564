@@ -1,0 +1,66 @@
+# Q564
+Given a matrix consists of 0 and 1, find the distance of the nearest 0 for each cell.
+
+The distance between two adjacent cells is 1.
+Example 1: 
+Input:
+
+0 0 0
+0 1 0
+0 0 0
+Output:
+0 0 0
+0 1 0
+0 0 0
+Example 2: 
+Input:
+
+0 0 0
+0 1 0
+1 1 1
+Output:
+0 0 0
+0 1 0
+1 2 1
+
+// solution 1 
+class Solution {
+public:
+    vector<vector<int>> updateMatrix(vector<vector<int>>& matrix) {
+        int m = matrix.size(), n = matrix[0].size();
+        int ms = m+n+1;
+        vector<vector<int>> distance(m, vector<int>(n, ms));
+        
+        for (int i=0; i<m; ++i) {
+            for (int j=0; j<n; ++j) {
+                if (matrix[i][j]) {
+                    if (i>0 && (distance[i-1][j]!= ms)) distance[i][j] = distance[i-1][j]+1;
+                    if (j>0 && (distance[i][j-1]!= ms) && (distance[i][j-1]<distance[i][j])) 
+                        distance[i][j] = distance[i][j-1]+1;
+                }
+                else {
+                    distance[i][j] = 0;
+                }
+            }
+        }
+    
+        for (int i=m-1; i>=0; --i) {
+            for (int j=n-1; j>=0; --j) {
+                if (matrix[i][j]) {
+                    if (i>0 && (distance[i-1][j]!= ms) && (distance[i][j] > distance[i-1][j])) 
+                        distance[i][j] = distance[i-1][j]+1;
+                    if (j>0 && (distance[i][j-1]!= ms) && (distance[i][j] > distance[i][j-1])) 
+                        distance[i][j] = distance[i][j-1]+1;
+                    if (i<m-1 && (distance[i+1][j]!= ms) && (distance[i][j] > distance[i+1][j])) 
+                        distance[i][j] = distance[i+1][j]+1;
+                    if (j<n-1 && (distance[i][j+1]!= ms) && (distance[i][j] > distance[i][j+1])) 
+                        distance[i][j] = distance[i][j+1]+1;
+                }
+            }
+        } 
+        
+        return distance;
+    }
+};
+
+
