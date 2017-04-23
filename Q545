@@ -1,0 +1,55 @@
+
+// not verified, just write
+
+vector<int> BoundaryOfBinaryTree(TreeNode *root) {
+  vector<int> boundary;
+  
+  LeftBoundary(root);
+  LeavesBoundary(root);
+  if (root->right) 
+    RightBoundary(root);
+}
+
+void LeftBoundary(TreeNode *node, vector<int>& b) {
+  if (node == null) return;
+  
+  // last saved for leave boundary
+  if (node->left == null && node->right == null) return; 
+  
+  b.push_back(node->val);
+  if (node->left) {
+    node = node->left;
+  } else {
+    node = node->right;
+  }
+  LeftBoundary(node, b);
+}
+
+void LeavesBoundary(TreeNode *node, vector<int>& b) {
+  if (node == null) return;
+  
+  // last saved for leave boundary
+  if (node->left == null && node->right == null) {
+    b.push_back(node->value);
+    return;
+  }
+  
+  LeavesBoundary(node->left,b);
+  LeavesBoundary(node->right,b);
+}
+
+void RightBoundary(TreeNode *node, vector<int>& b) {
+  if (node == null) return;
+  
+  // first already added by leave boundary
+  if (node->left == null && node->right == null) return; 
+  
+  if (node->right) {
+    node = node->right;
+  } else {
+    node = node->left;
+  }
+  
+  RightBoudary(node,b);
+  b.push_back(node->val);
+}
