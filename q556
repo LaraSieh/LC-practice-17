@@ -1,0 +1,42 @@
+556. Next Greater Element III
+
+
+Given a positive 32-bit integer n, you need to find the smallest 32-bit integer which has exactly the same digits existing in the integer n and is greater in value than n. If no such positive 32-bit integer exists, you need to return -1.
+
+Example 1:
+Input: 12
+Output: 21
+Example 2:
+Input: 21
+Output: -1
+
+
+// Wrong answer !!!!! Input:
+e.g 12443322    Output:14243322    Expected:13222344
+
+
+class Solution {
+public:
+    int nextGreaterElement(int n) {
+        int loop=1, cur=n%10, prev=cur, copy=n;
+        
+        while (copy > 0) {
+            int cur = copy%10; 
+            
+            if (cur < prev) {
+ //              cout << prev << " " << cur << "  " << loop << endl;
+               n += (((prev-cur)*loop)/10)*9;
+ //              cout << n << endl;
+               break;
+            }
+            
+            loop *= 10;
+            prev = cur;
+            copy = copy/10;
+        }
+        
+        if (copy == 0) return -1;
+        
+        return n;
+    }
+};
