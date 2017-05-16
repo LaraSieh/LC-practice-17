@@ -1,0 +1,36 @@
+541. Reverse String II
+
+Given a string and an integer k, you need to reverse the first k characters for every 2k characters counting from the start of the string. If there are less than k characters left, reverse all of them. If there are less than 2k but greater than or equal to k characters, then reverse the first k characters and left the other as original.
+
+// 6ms
+class Solution {
+public:
+    string reverseStr(string s, int k) {
+        size_t start=0, l=s.length();
+        
+        for (size_t i=0; i<s.length(); i+=k+k) {
+            size_t start = i, end = min(start+k-1,l-1);
+            while (start<end) {
+                char c = s[start];
+                s[start]=s[end];
+                s[end] = c;
+                ++start;--end;
+            }
+        }
+        return s;
+    }
+};
+
+// 9ms
+class Solution {
+public:
+    string reverseStr(string s, int k) {
+        size_t start=0, l=s.length();
+        
+        for (size_t i=0; i<s.length(); i+=k+k) {
+            reverse(&s[i], &s[min(i+k,l)]);
+        }
+        return s;
+    }
+};
+
