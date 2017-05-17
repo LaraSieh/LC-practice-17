@@ -1,0 +1,47 @@
+562 Longest Line of Consecutive One in Matrix
+
+Given a 01 matrix M, find the longest line of consecutive one in the matrix. The line could be horizontal, vertical, diagonal or anti-diagonal.
+
+Example:
+
+Input:
+[[0,1,1,0],
+ [0,1,1,0],
+ [0,0,0,1]]
+Output: 3
+
+
+// didn't run thru tests
+class Solution {
+  int longestLine(vector<vector<int>>& M) {
+    int m=M.size(), n=M[0].size;
+    
+    int ml = 0;
+    // horizontal
+    for (int i=0; i<m; ++i) {
+      int line=0;
+      for (int j=0; j<n; ++j) {
+        line = M[i][j] == 0 ? 0 : line + 1;
+        ml = max(ml, line);
+      }
+    }
+    
+     for (int j=0; j<n; ++j) {
+      int line=0;
+      for (int i=0; i<m; ++i) {
+        line = M[i][j] == 0 ? 0 : line + 1;
+        ml = max(ml, line);
+      }
+    }
+    
+    // diag and anti-diag
+    for (int k=0; k<m+n; ++k) {
+      int line = 0;
+      for (int i=min(k,m-1), j=max(0,k-m); i>=0&&j<n; --i,++j)
+      {
+        line = M[i][j] == 0 ? 0 : line + 1;
+        ml = max(ml, line);
+      }
+    }
+  }
+}
