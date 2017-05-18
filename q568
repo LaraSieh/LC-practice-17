@@ -55,6 +55,28 @@ You could stay at a city beyond the number of vacation days, but you should work
 If you fly from the city A to the city B and take the vacation on that day, the deduction towards vacation days will count towards the vacation days of city B in that week.
 We don't consider the impact of flight hours towards the calculation of vacation days.
 
+
+// copied from discussion
+int maxVacationDays(vector<vector<int>>& flights, vector<vector<int>>& days) {
+    // dp[i]  maximum play days at city in jth day
+    vector<int> dp(flights.size(), -1);
+    dp[0] = 0;
+    for (auto k = 0; k < days[0].size(); ++k) {
+        auto tmp = dp;
+        for (auto n = 0; n < flights.size(); ++n) {
+            for (auto n1 = 0; n1 < flights.size(); ++n1) {
+                if (flights[n][n1]) tmp[n1] = max(tmp[n1], dp[n]);
+            }
+        }
+        for (auto n = 0; n < flights.size(); ++n) dp[n] = tmp[n] != -1 ? tmp[n] + days[n][k] : -1;
+    }
+    return *max_element(dp.begin(), dp.end());
+}
+
+
+
+
+
 // copied from discussion
 
 /**
