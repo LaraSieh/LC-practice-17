@@ -1,0 +1,89 @@
+420. Strong Password Checker
+
+
+A password is considered strong if below conditions are all met:
+
+It has at least 6 characters and at most 20 characters.
+It must contain at least one lowercase letter, at least one uppercase letter, and at least one digit.
+It must NOT contain three repeating characters in a row ("...aaa..." is weak, but "...aa...a..." is strong, assuming other conditions are met).
+Write a function strongPasswordChecker(s), that takes a string s as input, and return the MINIMUM change required to make s a strong password. If s is already strong, return 0.
+
+Insertion, deletion or replace of any one character are all considered as one change.
+
+Subscribe to see which companies asked this question.
+
+// copied from discussion
+
+A Case By Case Approach.
+Consider 3 cases:
+
+Password is too short
+Password is too long
+Password has the proper length.
+Case 1 and 3 are very trivial to solve.
+
+The main work happens with case 2.
+
+Here is the code:
+
+
+class Solution {
+    bool has_lower = false, has_upper = false, has_digit = false;
+    int checks = 0, sum_breaks = 0, r0count = 0, r1count = 0;
+    vector<int> repeats;
+    void signature(const string & s)
+    {
+        char c = '\0';
+        int count = 0;
+        for (int i = 0; i < s.size(); ++i)
+        {
+            if (isupper(s[i]))
+                has_upper = true;
+            if (islower(s[i]))
+                has_lower = true;
+            if (isdigit(s[i]))
+                has_digit = true;
+            if (s[i] == c)
+                count ++;
+            else{
+                if (count >= 3)
+                    repeats.push_back(count);
+                c = s[i];
+                count = 1;
+            }
+        }
+        if (count >= 3)
+            repeats.push_back(count);
+        checks = 3 - (has_lower + has_upper + has_digit);
+        for (auto n : repeats)
+        {
+            if (n % 3 == 0)
+                r0count ++;
+            if (n % 3 == 1)
+                r1count ++;
+            sum_breaks += n / 3;
+        }
+    }
+public:
+    int strongPasswordChecker(string s) {
+        signature(s);
+        if (s.size() < 6)
+            return max(6 - (int)s.size(),  checks);
+        if (s.size() <= 20)
+            return max(sum_breaks, checks);
+        int diff0 = s.size() - 20, diff = diff0;
+        if (diff <= r0count)
+            return max(sum_breaks - diff, checks) + diff0;
+        sum_breaks -= r0count;
+        diff -= r0count;
+        if (diff <= r1count * 2)
+            return max(sum_breaks - diff/2, 0) + diff0;
+        sum_breaks -= r1count ;
+        diff -= r1count * 2;
+        if (diff <= sum_breaks * 3)
+            return max(sum_breaks - diff/3, checks) + diff0;
+        return checks + diff0;
+    }
+};
+
+
