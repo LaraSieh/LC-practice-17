@@ -1,0 +1,83 @@
+530. Minimum Absolute Difference in BST Add to List
+DescriptionHintsSubmissionsSolutions
+Total Accepted: 13887
+Total Submissions: 29460
+Difficulty: Easy
+Contributors:
+nagasupreeth
+Given a binary search tree with non-negative values, find the minimum absolute difference between values of any two nodes.
+
+Example:
+
+Input:
+
+   1
+    \
+     3
+    /
+   2
+
+Output:
+1
+
+Explanation:
+The minimum absolute difference is 1, which is the difference between 2 and 1 (or between 2 and 3).
+
+
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ 
+ 
+ 
+ 
+class Solution {
+public:
+    int getMinimumDifference(TreeNode* root) {
+        vector<int> vals;
+        
+        travesal(root,vals);
+        
+        int diff = abs(vals[1]-vals[0]);
+        for (int i=1; i<vals.size(); ++i) {
+            diff = min(diff, min(abs(vals[i]-vals[i-1]), abs(vals[i+1]-vals[i])));
+        }
+        return diff;
+    }
+    
+    void travesal(TreeNode *node, vector<int>& vals) {
+        if (node->left) travesal(node->left, vals);
+        vals.push_back(node->val);
+        if (node->right) travesal(node->right, vals);
+    }
+};
+
+// 32ms
+class Solution {
+public:
+    int getMinimumDifference(TreeNode* root) {
+        TreeNode *prev=nullptr;
+        int diff=INT_MAX;
+        
+        travesal(root,prev,diff);
+        return diff;
+    }
+    
+    void travesal(TreeNode *node, TreeNode *&prev, int& d) {
+        if (node==nullptr) return;
+        travesal(node->left,prev,d);
+        if (prev) {
+            d = min(d, node->val-prev->val);
+        }
+        prev = node;
+        travesal(node->right,prev,d);
+    }
+};
