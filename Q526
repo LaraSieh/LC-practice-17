@@ -31,6 +31,14 @@ Note:
 N is a positive integer and will not exceed 15.
 
 
+Recursive Solution
+
+Basic idea: permutation of A[1..n] equals to
+A[1] + permutation of (A[1..n] - A[1])
+A[2] + permutation of (A[1..n] - A[2])
+...
+A[n] + permutation of (A[1..n] - A[n]).
+
 们用变量pos来标记已经生成的数字的个数，如果大于N了，说明已经找到了一组排列，结果res自增1。在for循环中，i应该从1开始，
 因为我们遍历1到N中的所有数字，如果该数字未被使用过，且满足和坐标之间的整除关系，那么我们标记该数字已被访问过，
 再调用下一个位置的递归函数
