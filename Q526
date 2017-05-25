@@ -1,0 +1,85 @@
+526. Beautiful Arrangement Add to List
+DescriptionHintsSubmissionsSolutions
+Total Accepted: 8378
+Total Submissions: 15276
+Difficulty: Medium
+Contributors:
+love_Fawn
+Suppose you have N integers from 1 to N. We define a beautiful arrangement as an array that is constructed by these N numbers successfully if one of the following is true for the ith position (1 ≤ i ≤ N) in this array:
+
+The number at the ith position is divisible by i.
+i is divisible by the number at the ith position.
+Now given N, how many beautiful arrangements can you construct?
+
+Example 1:
+Input: 2
+Output: 2
+Explanation: 
+
+The first beautiful arrangement is [1, 2]:
+
+Number at the 1st position (i=1) is 1, and 1 is divisible by i (i=1).
+
+Number at the 2nd position (i=2) is 2, and 2 is divisible by i (i=2).
+
+The second beautiful arrangement is [2, 1]:
+
+Number at the 1st position (i=1) is 2, and 2 is divisible by i (i=1).
+
+Number at the 2nd position (i=2) is 1, and i (i=2) is divisible by 1.
+Note:
+N is a positive integer and will not exceed 15.
+
+// run full permutation, 116ms
+class Solution {
+public:
+    int countArrangement(int N) {
+        int ans=0;
+        vector<int> visited(N+1,0);
+        
+        recursive(N, visited, 1, ans);
+        return ans;
+    }
+    
+    // how many ways for n's elements in vector vs;
+    void recursive(int N, vector<int>& v, int pos, int& ans) {
+        if (pos > N) {++ans; return;}
+        
+        for (int i=1; i<=N; ++i) {
+            if (v[i]==0 && (i%pos==0 || pos%i==0)) {
+                v[i] = 1;
+                recursive(N,v,pos+1,ans);
+                v[i] = 0;
+            }
+        }
+        
+        return;
+    }
+};
+
+
+// we don't need to run  full permutation, 6ms
+class Solution {
+public:
+    int countArrangement(int N) {
+        vector<int> series;
+        
+        for (int i=0; i<N; ++i) series.push_back(i+1);
+        return recursive(N, series);
+    }
+    
+    // how many ways for n's elements in vector vs;
+    int recursive(int n, vector<int>& s) {
+        if (n==0) return 1;
+        int counts=0;
+        for (int i=0; i<n; ++i) {
+            if (s[i]%n==0 || n%s[i]==0) {
+                swap(s[i],s[n-1]);
+                counts += recursive(n-1,s);
+                swap(s[i],s[n-1]);
+            }
+        }
+        
+        return counts;
+    }
+};
