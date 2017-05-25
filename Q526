@@ -30,6 +30,11 @@ Number at the 2nd position (i=2) is 1, and i (i=2) is divisible by 1.
 Note:
 N is a positive integer and will not exceed 15.
 
+
+们用变量pos来标记已经生成的数字的个数，如果大于N了，说明已经找到了一组排列，结果res自增1。在for循环中，i应该从1开始，
+因为我们遍历1到N中的所有数字，如果该数字未被使用过，且满足和坐标之间的整除关系，那么我们标记该数字已被访问过，
+再调用下一个位置的递归函数
+
 // run full permutation, 116ms
 class Solution {
 public:
