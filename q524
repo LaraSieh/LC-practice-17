@@ -1,0 +1,52 @@
+524. Longest Word in Dictionary through Deleting Add to List
+DescriptionHintsSubmissionsSolutions
+Total Accepted: 7087
+Total Submissions: 17175
+Difficulty: Medium
+Contributors:
+love_Fawn
+Given a string and a string dictionary, find the longest string in the dictionary that can be formed by deleting some characters of the given string. If there are more than one possible results, return the longest word with the smallest lexicographical order. If there is no possible result, return the empty string.
+
+Example 1:
+Input:
+s = "abpcplea", d = ["ale","apple","monkey","plea"]
+
+Output: 
+"apple"
+Example 2:
+Input:
+s = "abpcplea", d = ["a","b","c"]
+
+Output: 
+"a"
+Note:
+All the strings in the input will only contain lower-case letters.
+The size of the dictionary won't exceed 1,000.
+The length of all the strings in the input won't exceed 1,000.
+
+
+
+
+class Solution {
+public:
+    string findLongestWord(string s, vector<string>& d) {
+        string maxword;
+        int slen=s.size(), maxcnt = 0;
+        
+        for (string dict : d) {
+            int dlen = dict.size(), j=0;
+            for (int i=0; i<slen && j<dlen; ++i) {
+                while (i<slen && s[i] != dict[j]) ++i;
+                if (i<slen) ++j;
+            }
+            
+            // end of word
+            if (j==dlen &&  ((dlen>maxcnt) || (dlen==maxcnt && dict<maxword))) {
+                maxword = dict;
+                maxcnt = dlen;
+            }
+        }
+        
+        return maxword;
+    }
+};
